@@ -60,7 +60,7 @@ function Predict() {
   };
 
   const submitRequest = () => {
-      fetch("http://localhost:5037/api/DigitNn?data=" + JSON.stringify(colours.flat().map((value) => {if(value == 'black'){return 1;} else {return 0;}})), {method: "GET", redirect: "follow"})
+      fetch("http://localhost:5064/api/DigitNn?data=" + JSON.stringify(colours.flat().map((value) => {if(value == 'black'){return 1;} else {return 0;}})), {method: "GET", redirect: "follow"})
         .then(async (response) => setPrediction(await response.text()))
         .then((result) => console.log(result))
         .catch((error) => console.error(error));

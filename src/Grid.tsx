@@ -60,13 +60,20 @@ function Grid() {
   };
 
   const handlePutRequest = () => {
-      fetch("http://localhost:5037/api/DigitNn?data=" + digit + JSON.stringify(colours.flat().map((value) => {if(value == 'black'){return 1;} else {return 0;}})), {method: "PUT", redirect: "follow"})
+      fetch("http://localhost:5064/api/DigitNn?data=" + digit + JSON.stringify(colours.flat().map((value) => {if(value == 'black'){return 1;} else {return 0;}})), {method: "PUT", redirect: "follow"})
         .then((response) => response.text())
         .then((result) => console.log(result))
         .catch((error) => console.error(error));
     resetColours();
     setDigit( Math.floor(Math.random() * 10));
   };
+
+  const handleTrainRequest = () => {
+    fetch("http://localhost:5064/api/DigitNn", {method: "POST", redirect: "follow"})
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
+};
 
   
 
@@ -105,6 +112,7 @@ function Grid() {
         <p style={{marginLeft : '30px'}}>{digit}</p>
         <Button buttonText={"Reset"} onClick={resetColours} />
         <Button buttonText={"Submit"} onClick={handlePutRequest} />
+        <Button buttonText={"Train"} onClick={handleTrainRequest} />
       </div>
     </div>
   );
