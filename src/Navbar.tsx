@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
+import "./NavBar.css";
 
 const Navbar = () => {
-    return (
-        <div style={{ display: 'flex', marginLeft: '80px'}}>
-            <Link style={{margin : '40px'}} to="/">Home</Link>
-            <Link style={{margin : '40px'}} to="/train">Train</Link>
-            <Link style={{margin : '40px'}} to="/predict">Predict</Link>
-        </div>
-    );
-  };
+  return (
+    <ul>
+      <li>
+        <Link to="/">Home</Link>
+      </li>
+      <li>
+        <Link to="/train">Train</Link>
+      </li>
+      <li>
+        <Link to="/predict">Predict</Link>
+      </li>
+    </ul>
+  );
+};
 
-  export default Navbar;
+export default Navbar;
