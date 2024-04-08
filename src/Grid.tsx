@@ -60,7 +60,7 @@ function Grid() {
   };
 
   const handlePutRequest = () => {
-      fetch("http://localhost:5064/api/DigitNn?data=" + digit + JSON.stringify(colours.flat().map((value) => {if(value == 'black'){return 1;} else {return 0;}})), {method: "PUT", redirect: "follow"})
+      fetch("http://134.60.157.99:5064/api/DigitNn?data=" + digit + JSON.stringify(colours.flat().map((value) => {if(value == 'black'){return 1;} else {return 0;}})), {method: "PUT", redirect: "follow"})
         .then((response) => response.text())
         .then((result) => console.log(result))
         .catch((error) => console.error(error));
@@ -69,7 +69,7 @@ function Grid() {
   };
 
   const handleTrainRequest = () => {
-    fetch("http://localhost:5064/api/DigitNn", {method: "POST", redirect: "follow"})
+    fetch("http://134.60.157.99:5064/api/DigitNn", {method: "POST", redirect: "follow"})
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));

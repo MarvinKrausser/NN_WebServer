@@ -7,8 +7,6 @@ WORKDIR /app
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-ENV NODE_OPTIONS=--max_old_space_size=2048
-
 # Install dependencies
 RUN npm install
 
@@ -19,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Command to run the application
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "dev", "--", "--host"]
