@@ -71,7 +71,7 @@ function Predict() {
   const submitRequest = () => {
     setPrediction("Computing");
     fetch(
-      "http://134.60.157.99:5064/api/DigitNn?data=" +
+      "http://localhost:5064/api/DigitNn?data=" +
         JSON.stringify(
           colours.flat().map((value) => {
             if (value == "black") {
