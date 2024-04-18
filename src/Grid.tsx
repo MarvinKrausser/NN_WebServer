@@ -1,75 +1,21 @@
 import { useEffect, useState } from "react";
 import Button from "./Button";
+import {
+  startTraining,
+  submitData,
+  characters,
+  setupMouseEvents,
+  requestPrediction,
+} from "./Utils";
 
-function Grid() {
+interface Props {
+  type: string;
+}
+
+function Grid(props: Props) {
   // Define the dimensions of the matrix
   const numRows = 30;
   const tileSize = 20; // Adjust the size of each tile as needed
-
-  let characters = [
-    "a",
-    "b",
-    "c",
-    "d",
-    "e",
-    "f",
-    "g",
-    "h",
-    "i",
-    "j",
-    "k",
-    "l",
-    "m",
-    "n",
-    "o",
-    "p",
-    "q",
-    "r",
-    "s",
-    "t",
-    "u",
-    "v",
-    "w",
-    "x",
-    "y",
-    "z",
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-  ];
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [colours, setColours] = useState(
@@ -80,6 +26,7 @@ function Grid() {
   const [offsetY, setOffsetY] = useState(0);
   const [offsetX, setOffsetX] = useState(0);
   const [status, setStatus] = useState("");
+  const [prediction, setPrediction] = useState("");
 
   const handleMouseMove = (event: { clientX: any; clientY: any }) => {
     setPosition({ x: event.clientX, y: event.clientY });
@@ -110,23 +57,8 @@ function Grid() {
   };
 
   useEffect(() => {
-    const handleMouseDown = () => {
-      setIsMouseDown(true);
-    };
-
-    const handleMouseUp = () => {
-      setIsMouseDown(false);
-    };
-
-    // Add event listeners when component mounts
-    document.addEventListener("mousedown", handleMouseDown);
-    document.addEventListener("mouseup", handleMouseUp);
-
-    // Clean up event listeners when component unmounts
-    return () => {
-      document.removeEventListener("mousedown", handleMouseDown);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
+    const cleanup = setupMouseEvents(setIsMouseDown);
+    return cleanup;
   }, []);
 
   const handleContextMenu = (event: { preventDefault: () => void }) => {
@@ -135,42 +67,27 @@ function Grid() {
   };
 
   const handlePutRequest = () => {
-    fetch(
-      "http://localhost:5064/api/DigitNn?data=" +
-        JSON.stringify({
-          target: digit,
-          input: colours.flat().map((value) => {
-            if (value == "black") {
-              return 1;
-            } else {
-              return 0;
-            }
-          }),
-        }),
-      { method: "PUT", redirect: "follow" }
-    )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.error(error));
+    submitData(digit, colours);
     resetColours();
     setDigit(Math.floor(Math.random() * 62));
   };
 
-  const handleTrainRequest = () => {
+  const handleTrainRequest = async () => {
     setStatus("Training");
-    fetch("http://localhost:5064/api/DigitNn", {
-      method: "POST",
-      redirect: "follow",
-    })
-      .then(async (response) => setStatus(await response.text()))
-      .then((result) => console.log(result))
-      .catch((error) => console.error(error));
+    setStatus(await startTraining());
+  };
+
+  const submitRequest = async () => {
+    setPrediction("Computing");
+    setPrediction(await requestPrediction(colours));
+    resetColours();
   };
 
   // Render the matrix
   return (
     <div className="input">
-      <h1>Training</h1>
+      {props.type == "train" && <h1>Train</h1>}
+      {props.type == "predict" && <h1>Predict</h1>}
       <div
         className="grid"
         onDragStart={(e) => {
@@ -201,13 +118,22 @@ function Grid() {
           </div>
         ))}
       </div>
-      <div style={{ marginLeft: "30px" }}>
-        <p style={{ marginLeft: "30px" }}>{characters[digit]}</p>
-        <Button buttonText={"Reset"} onClick={resetColours} />
-        <Button buttonText={"Submit"} onClick={handlePutRequest} />
-        <Button buttonText={"Train"} onClick={handleTrainRequest} />
-        <p style={{ marginLeft: "30px" }}>{status}</p>
-      </div>
+      {props.type == "train" && (
+        <div style={{ marginLeft: "30px" }}>
+          <p style={{ marginLeft: "30px" }}>{characters[digit]}</p>
+          <Button buttonText={"Reset"} onClick={resetColours} />
+          <Button buttonText={"Submit"} onClick={handlePutRequest} />
+          <Button buttonText={"Train"} onClick={handleTrainRequest} />
+          <p style={{ marginLeft: "30px" }}>{status}</p>
+        </div>
+      )}
+
+      {props.type == "predict" && (
+        <div style={{ marginLeft: "30px" }}>
+          <p style={{ marginLeft: "30px" }}>{prediction}</p>
+          <Button buttonText={"Submit"} onClick={submitRequest} />
+        </div>
+      )}
     </div>
   );
 }
