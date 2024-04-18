@@ -1,4 +1,4 @@
-const ip = "localhost:5064";
+const ip = "134.60.157.99:5064";
 
 export const requestPrediction = async (colours: any[][]): Promise<any> => {
   try {

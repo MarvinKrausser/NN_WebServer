@@ -85,7 +85,7 @@ function Grid(props: Props) {
 
   // Render the matrix
   return (
-    <div className="input">
+    <div className="site">
       {props.type == "train" && <h1>Train</h1>}
       {props.type == "predict" && <h1>Predict</h1>}
       <div
@@ -118,6 +118,7 @@ function Grid(props: Props) {
           </div>
         ))}
       </div>
+
       {props.type == "train" && (
         <div style={{ marginLeft: "30px" }}>
           <p style={{ marginLeft: "30px" }}>{characters[digit]}</p>

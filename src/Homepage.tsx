@@ -1,7 +1,9 @@
 function Homepage() {
-    return(
-        <h1 style={{marginLeft : '40px'}}>Super Intelligenz</h1>
-    );
+  return (
+    <div className="site">
+      <h1>Super Intelligenz</h1>
+    </div>
+  );
 }
 
 export default Homepage;
