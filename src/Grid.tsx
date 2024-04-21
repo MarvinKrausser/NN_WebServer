@@ -6,6 +6,9 @@ import {
   characters,
   setupMouseEvents,
   requestPrediction,
+  tileSize,
+  colourWhite,
+  colourBlack,
 } from "./Utils";
 
 interface Props {
@@ -15,11 +18,10 @@ interface Props {
 function Grid(props: Props) {
   // Define the dimensions of the matrix
   const numRows = 30;
-  const tileSize = 20; // Adjust the size of each tile as needed
 
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [colours, setColours] = useState(
-    Array.from({ length: numRows }, () => Array(numRows).fill("white"))
+    Array.from({ length: numRows }, () => Array(numRows).fill(colourWhite))
   );
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [digit, setDigit] = useState(Math.floor(Math.random() * 62));
@@ -31,13 +33,13 @@ function Grid(props: Props) {
   const handleMouseMove = (event: { clientX: any; clientY: any }) => {
     setPosition({ x: event.clientX, y: event.clientY });
     if (isMouseDown) {
-      handleEnter("black");
+      handleEnter(colourBlack);
     }
   };
 
   const resetColours = () => {
     setColours(
-      Array.from({ length: numRows }, () => Array(numRows).fill("white"))
+      Array.from({ length: numRows }, () => Array(numRows).fill(colourWhite))
     );
   };
 
@@ -63,11 +65,11 @@ function Grid(props: Props) {
 
   const handleContextMenu = (event: { preventDefault: () => void }) => {
     event.preventDefault(); // Prevents the default context menu from appearing
-    handleEnter("white");
+    handleEnter(colourWhite);
   };
 
-  const handlePutRequest = () => {
-    submitData(digit, colours);
+  const handlePutRequest = async () => {
+    setStatus(await submitData(digit, colours));
     resetColours();
     setDigit(Math.floor(Math.random() * 62));
   };
@@ -94,9 +96,8 @@ function Grid(props: Props) {
           e.preventDefault();
         }}
         onMouseMove={handleMouseMove}
-        onMouseDown={() => handleEnter("black")}
+        onMouseDown={() => handleEnter(colourBlack)}
         onContextMenu={handleContextMenu}
-        style={{ display: "flex", flexDirection: "column" }}
         ref={(el) => {
           if (!el) return;
           setOffsetY(el.getBoundingClientRect().top);

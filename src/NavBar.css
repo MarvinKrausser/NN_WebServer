@@ -1,4 +1,4 @@
-ul {
+.listNavbar {
   list-style-type: none;
   width: 100%;
   margin: 0;
@@ -10,13 +10,14 @@ ul {
   left: 0;
   border: 1px solid #f3f3f3;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
 }
 
-li {
+.elementNavbar {
   float: left;
 }
 
-li a {
+.elementNavbar a {
   display: block;
   color: #001f7d;
   text-align: center;
@@ -26,6 +27,6 @@ li a {
   font-family: Arial, sans-serif;
 }
 
-li a:hover {
+.elementNavbar a:hover {
   background-color: #d4d4d4;
 }
